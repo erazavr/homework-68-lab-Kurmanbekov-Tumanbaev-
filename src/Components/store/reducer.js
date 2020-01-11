@@ -1,4 +1,4 @@
-import {ADD, DECREMENT, INCREMENT, SUBTRACT} from "./actions";
+import {ADD, DECREMENT, INCREMENT, SUBTRACT, FETCH_COUNTER_SUCCESS} from "./actions";
 
 const initialState = {
   counter: 0,
@@ -14,6 +14,8 @@ const reducer = (state = initialState, action) => {
       return {...state, counter: state.counter + action.amount};
     case SUBTRACT:
       return {...state, counter: state.counter - action.amount};
+    case FETCH_COUNTER_SUCCESS:
+      return {...state, counter: action.counter};
     default:
       return state;
   }

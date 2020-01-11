@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
 import './Counter.css';
 import {connect} from 'react-redux';
-import {addCounter, decrementCounter, incrementCounter, subtract} from "../store/actions";
+import {addCounter, decrementCounter, incrementCounter, subtract, fetchCounter} from "../store/actions";
 
 class Counter extends Component {
+
+    componentDidMount() {
+        this.props.fetchCounter();
+    }
+
     render() {
         return (
             <div className="Counter">
@@ -29,6 +34,7 @@ const mapDispatchToProps = dispatch => {
       decreaseCounter: () => dispatch(decrementCounter()),
       addCounter: () => dispatch(addCounter(5)),
       subtractCounter: () => dispatch(subtract(5)),
+      fetchCounter: () => dispatch(fetchCounter())
   }
 };
 
