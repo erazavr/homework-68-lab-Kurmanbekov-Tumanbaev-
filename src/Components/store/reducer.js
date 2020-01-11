@@ -1,17 +1,19 @@
+import {ADD, DECREMENT, INCREMENT, SUBTRACT} from "./actions";
+
 const initialState = {
   counter: 0,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'INCREMENT':
+    case INCREMENT:
       return {...state, counter: state.counter + 1};
-    case 'DECREMENT':
+    case DECREMENT:
       return {...state, counter: state.counter - 1};
-    case 'ADD':
-      return {...state, counter: state.counter + action.value};
-    case 'SUBTRACT':
-      return {...state, counter: state.counter - action.value};
+    case ADD:
+      return {...state, counter: state.counter + action.amount};
+    case SUBTRACT:
+      return {...state, counter: state.counter - action.amount};
     default:
       return state;
   }
