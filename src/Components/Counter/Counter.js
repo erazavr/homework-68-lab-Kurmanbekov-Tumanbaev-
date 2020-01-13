@@ -8,8 +8,8 @@ class Counter extends Component {
     componentDidMount() {
         this.props.fetchCounter();
     }
-
     render() {
+
         return (
             <div className="Counter">
                 <h1>{this.props.counter}</h1>
@@ -21,7 +21,6 @@ class Counter extends Component {
         );
     }
 }
-
 const mapStateToProps = state => {
   return {
       counter: state.counter,
@@ -34,7 +33,7 @@ const mapDispatchToProps = dispatch => {
       decreaseCounter: () => dispatch(decrementCounter()),
       addCounter: () => dispatch(addCounter(5)),
       subtractCounter: () => dispatch(subtract(5)),
-      fetchCounter: () => dispatch(fetchCounter())
+      fetchCounter: () => dispatch(fetchCounter()),
   }
 };
 
