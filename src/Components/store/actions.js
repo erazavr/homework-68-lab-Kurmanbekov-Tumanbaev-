@@ -24,7 +24,7 @@ export const fetchCounterError = error => {
 export const fetchCounter = () => {
   return dispatch => {
       dispatch(fetchCounterRequest());
-      axiosAPI.get('counter.json').then(response => {
+      axiosAPI.get('/counter.json').then(response => {
         dispatch(fetchCounterSuccess(response.data))
       }, error => {
           dispatch(fetchCounterError(error))
@@ -32,15 +32,41 @@ export const fetchCounter = () => {
   }
 };
 
+
+export const postCounter = () => {
+    return (dispatch, getState) => {
+        dispatch(fetchCounterRequest());
+        const counter = getState().counter;
+        axiosAPI.put('/counter.json', counter).then(() => {
+            dispatch(fetchCounter())
+        }, error => {
+            dispatch(fetchCounterError(error))
+        })
+    }
+};
+
 export const incrementCounter = () => {
-  return {type: INCREMENT};
+  return dispatch => {
+      dispatch({type: INCREMENT});
+      dispatch(postCounter())
+  };
+
 };
 export const decrementCounter = () => {
-  return {type: DECREMENT};
+  return dispatch => {
+      dispatch({type: DECREMENT});
+      dispatch(postCounter())
+  };
 };
 export const addCounter = amount => {
-  return {type: ADD, amount};
+  return dispatch => {
+      dispatch({type: ADD, amount});
+      dispatch(postCounter())
+  };
 };
 export const subtract = amount => {
-  return {type: SUBTRACT, amount};
+  return dispatch => {
+      dispatch({type: SUBTRACT, amount});
+      dispatch(postCounter())
+  };
 };
