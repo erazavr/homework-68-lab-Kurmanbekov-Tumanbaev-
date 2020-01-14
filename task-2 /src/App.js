@@ -2,60 +2,61 @@ import React, {Component} from 'react';
 import './App.css'
 import AddForm from "./component/AddForm/AddForm";
 import WatchList from "./component/WatchList/WatchList";
-import nanoid from 'nanoid'
+import {connect} from "react-redux";
+import {add, fetchTodo, remove, todoDelete, todoPost} from "./component/store/actions";
 class App extends Component {
     state = {
-        film: '',
-        id: '',
-        films: [],
-
+        task: '',
     };
     changeName = event => {
-        this.setState({film: event.target.value})
+        this.setState({task: event.target.value})
     };
-    addMovieName = e => {
-      e.preventDefault();
-      if (this.state.film === '') {
-        alert('Вы ничего не ввели')
-      } else {
-          const films = [...this.state.films];
-          films.push({film: this.state.film, id: nanoid()});
-          this.setState({films, film: '',});
-      }
-
-
+    componentDidMount() {
+        this.props.fetchTodo()
+    }
+    addPost = (e) => {
+        e.preventDefault();
+        this.props.todoPost({task: this.state.task})
+        this.setState({task: ''})
     };
-    removeMovieName = id => {
-        const filmIndex = this.state.films.findIndex(t=>t.id === id);
-        const films = [...this.state.films];
-        films.splice(filmIndex, 1);
-        this.setState({films})
+    deletePost = (id) => {
+        this.props.todoDelete(id)
     };
-    editMovie = (id, event) => {
-        const films = [...this.state.films];
-        films[id].film = event.target.value;
-        this.setState({films})
-    };
-
     render() {
         return (
+
             <div className='App'>
               <AddForm
                   onChange={this.changeName}
-                  onsubmit={this.addMovieName}
-                  name={this.state.film}
+                  name={this.state.task}
+                  onClick={this.addPost}
               />
-                {this.state.films.map((name, index) => (
+                {this.props.tasks &&
+                Object.keys(this.props.tasks).map(task => (
                     <WatchList
-                        key={name.id}
-                        name={name.film}
-                        remove={()=> this.removeMovieName(name.id)}
-                        onChange={event => this.editMovie(index, event)}
+                        key={task}
+                        name={this.props.tasks[task].task}
+                        remove={()=>this.deletePost(task)}
                     />
                 ))}
             </div>
         );
     }
 }
-
-export default App;
+const mapStateToProps = state => {
+    return {
+        task: state.task,
+        id: state.id,
+        tasks: state.tasks,
+    }
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        add: ()=> dispatch(add()),
+        remove: () => dispatch(remove()),
+        fetchTodo: () => dispatch(fetchTodo()),
+        todoPost: (data) => dispatch(todoPost(data)),
+        todoDelete: (id) => dispatch(todoDelete(id))
+    }
+};
+export default connect(mapStateToProps,mapDispatchToProps)(App);
